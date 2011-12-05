@@ -1,0 +1,15 @@
+h1. tagbrowser - Technology agnostic browser component
+
+This is a simple layer on top of apaches http components. Its interfaces resembles that of a web browser:
+<pre><code>
+TagBrowser browser = new TagBrowser();
+browser.open("https://github.com/joergviola/play-cms");
+browser.clickName("About");
+TagForm form = browser.getForm(1);
+form.setField("user", "test1");
+form.setField("pwd", "test2");
+form.submit("Register");
+</code></pre>
+Besides being able to write simple scripts against web sites, these scripts are technology agnostic: Under the hood, the tagbrowser handles all the subtle details of state managements introduced by different technologies. PHP, Ruby, Java frameworks - they all handle state management slightly different.
+
+By only offering the high-level interface, tagbrowser can do all cookie and URL handling and thus provide technology agnostic scripts.
