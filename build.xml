@@ -2,6 +2,12 @@
 <project default="create_run_jar" name="Create Runnable Jar for Project tagbrowser with Jar-in-Jar Loader">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
+	
+    <target name="clean">
+    	<delete dir="dist" />
+    </target>
+	
+	
     <target name="create_run_jar">
         <jar destfile="dist/tagsobe.jar">
             <manifest>
@@ -10,8 +16,8 @@
                 <attribute name="Class-Path" value="."/>
                 <attribute name="Rsrc-Class-Path" value="./ httpclient-4.1.2.jar httpcore-4.1.2.jar commons-logging-1.1.1.jar jsoup-1.6.1.jar junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar"/>
             </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="/Users/viola/Workspaces/waduno/tagbrowser/bin"/>
+            <zipfileset src="lib/jar-in-jar-loader.zip"/>
+            <fileset dir="bin"/>
             <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="httpclient-4.1.2.jar"/>
             <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="httpcore-4.1.2.jar"/>
             <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="commons-logging-1.1.1.jar"/>
