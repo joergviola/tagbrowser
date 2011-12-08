@@ -1,6 +1,7 @@
 package org.tagbrowser.api;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -10,6 +11,7 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.protocol.BasicHttpContext;
@@ -28,8 +30,13 @@ public class TagBrowser {
 	private HttpResponse response;
 	private String content;
 	private long ms;
+	private long parse;
 	private String location;
 	private Document document;
+	private String method;
+	PrintStream statStream;
+	private boolean showCookies;
+	boolean showParams;
 
 	public TagBrowser() {
 		httpClient = new DefaultHttpClient();
@@ -39,27 +46,31 @@ public class TagBrowser {
 					HttpResponse response, HttpContext context) {
 				int responseCode = response.getStatusLine().getStatusCode();
 				if (responseCode == 301 || responseCode == 302) {
+					location = response.getHeaders("Location")[0].getValue();
 					return true;
-				} else
+				} else {
+					location = request.getRequestLine().getUri();
 					return false;
+				}
 			}
 		});
 	}
 
 	public void open(String uri) throws ClientProtocolException, IOException {
 		if (!uri.startsWith("http")) {
+			if (!uri.startsWith("/")) {
+				if (uri.startsWith("?")) {
+					int qmark = location.indexOf('?');
+					uri = location.substring(0, qmark) + uri;
+				} else {
+					int lastSlash = location.lastIndexOf('/');
+					uri = location.substring(0, lastSlash + 1) + uri;
+				}
+			}
 			uri = ctx.getAttribute(ExecutionContext.HTTP_TARGET_HOST) + uri;
 		}
 		HttpGet httpGet = new HttpGet(uri);
-		httpGet.addHeader("Accept-Language", "de");
-		long start = System.currentTimeMillis();
-		response = httpClient.execute(httpGet, ctx);
-		ms = System.currentTimeMillis() - start;
-		int statusCode = getStatusCode();
-		if (statusCode != 200)
-			throw new IllegalStateException("Response code: " + statusCode);
-		location = uri;
-		content = null;
+		request(httpGet);
 	}
 
 	void post(HttpPost httpPost) throws ClientProtocolException, IOException,
@@ -69,15 +80,33 @@ public class TagBrowser {
 			uri = ctx.getAttribute(ExecutionContext.HTTP_TARGET_HOST) + uri;
 			httpPost.setURI(new URI(uri));
 		}
-		httpPost.addHeader("Accept-Language", "de");
+		request(httpPost);
+	}
+
+	private void request(HttpRequestBase request) throws IOException,
+			ClientProtocolException {
+		request.addHeader("Accept-Language", "de");
+		if (showCookies && statStream != null)
+			statStream.println(httpClient.getCookieStore().getCookies());
 		long start = System.currentTimeMillis();
-		response = httpClient.execute(httpPost, ctx);
+		response = httpClient.execute(request, ctx);
 		ms = System.currentTimeMillis() - start;
+		method = request.getMethod();
+		if (statStream != null)
+			statStream.println(stats());
 		int statusCode = getStatusCode();
 		if (statusCode != 200)
 			throw new IllegalStateException("Response code: " + statusCode);
-		location = httpPost.getURI().toString();
 		content = null;
+		parse = 0L;
+	}
+
+	public void setShowCookies(boolean showCookies) {
+		this.showCookies = showCookies;
+	}
+
+	public void setShowParams(boolean showParams) {
+		this.showParams = showParams;
 	}
 
 	public int getStatusCode() {
@@ -106,7 +135,9 @@ public class TagBrowser {
 
 	private void getDom() throws IOException {
 		getContent();
+		long start = System.currentTimeMillis();
 		document = Jsoup.parse(content);
+		parse += System.currentTimeMillis() - start;
 	}
 
 	public void clickId(String id) {
@@ -141,8 +172,11 @@ public class TagBrowser {
 	}
 
 	public String getContent() throws IOException {
-		if (content == null)
+		if (content == null) {
+			long start = System.currentTimeMillis();
 			content = EntityUtils.toString(response.getEntity());
+			parse += System.currentTimeMillis() - start;
+		}
 		return content;
 	}
 
@@ -159,5 +193,22 @@ public class TagBrowser {
 		System.out.println(getStatusCode());
 		getContent();
 		System.out.println(content);
+	}
+
+	public String stats() {
+		return method + " " + location + " " + parse + "parse" + " " + ms
+				+ "load";
+	}
+
+	public void submit(int index, String... params)
+			throws ElementNotFoundException, IOException, URISyntaxException {
+		TagForm form = getForm(index);
+		for (int i = 0; i < params.length - 1; i++)
+			form.setField(i, params[i]);
+		form.submitValue(params[params.length - 1]);
+	}
+
+	public void setStatStream(PrintStream statStream) {
+		this.statStream = statStream;
 	}
 }
