@@ -181,7 +181,7 @@ public class TagForm {
 
 	public String getUriForGet(String submit) {
 		URIBuilder result = new URIBuilder();
-		result.encode(action);
+		result.plain(action);
 		result.plain("?");
 		result.encode(submit);
 		result.plain("=");

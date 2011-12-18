@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -34,13 +36,16 @@ public class TagBrowser {
 	private String location;
 	private Document document;
 	private String method;
-	PrintStream statStream;
 	private boolean showCookies;
 	boolean showParams;
+	PrintStream statStream;
+	private List<Counter> counter;
+	private int requestIndex;
 
 	public TagBrowser() {
 		httpClient = new DefaultHttpClient();
 		ctx = new BasicHttpContext();
+		counter = new ArrayList<Counter>();
 		httpClient.setRedirectStrategy(new DefaultRedirectStrategy() {
 			public boolean isRedirected(HttpRequest request,
 					HttpResponse response, HttpContext context) {
@@ -92,8 +97,7 @@ public class TagBrowser {
 		response = httpClient.execute(request, ctx);
 		ms = System.currentTimeMillis() - start;
 		method = request.getMethod();
-		if (statStream != null)
-			statStream.println(stats());
+		stats();
 		int statusCode = getStatusCode();
 		if (statusCode != 200)
 			throw new IllegalStateException("Response code: " + statusCode);
@@ -195,9 +199,13 @@ public class TagBrowser {
 		System.out.println(content);
 	}
 
-	public String stats() {
-		return method + " " + location + " " + parse + "parse" + " " + ms
-				+ "load";
+	public void stats() {
+		if (statStream != null)
+			statStream.println(method + " " + location + " " + parse + "parse"
+					+ " " + ms + "load");
+		for (Counter counter : this.counter) {
+			counter.count(requestIndex++, parse, ms);
+		}
 	}
 
 	public void submit(int index, String... params)
@@ -210,5 +218,9 @@ public class TagBrowser {
 
 	public void setStatStream(PrintStream statStream) {
 		this.statStream = statStream;
+	}
+
+	public void addCounter(Counter counter) {
+		this.counter.add(counter);
 	}
 }
