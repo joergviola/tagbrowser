@@ -7,6 +7,16 @@
     	<delete dir="dist" />
     </target>
 	
+    <target name="compile">
+    	<mkdir dir="bin"/>
+    	<javac source="src" destdir="bin">
+    		<classpath>
+    			<fileset dir="lib">
+    				<include name="*.jar"/>
+    			</fileset>
+    		</classpath>
+    	</javac>
+    </target>
 	
     <target name="create_run_jar">
         <jar destfile="dist/tagsobe.jar">
@@ -18,10 +28,10 @@
             </manifest>
             <zipfileset src="lib/jar-in-jar-loader.zip"/>
             <fileset dir="bin"/>
-            <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="httpclient-4.1.2.jar"/>
-            <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="httpcore-4.1.2.jar"/>
-            <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="commons-logging-1.1.1.jar"/>
-            <zipfileset dir="/Users/viola/Workspaces/waduno/tagbrowser/lib" includes="jsoup-1.6.1.jar"/>
+            <zipfileset dir="lib" includes="httpclient-4.1.2.jar"/>
+            <zipfileset dir="lib" includes="httpcore-4.1.2.jar"/>
+            <zipfileset dir="lib" includes="commons-logging-1.1.1.jar"/>
+            <zipfileset dir="lib" includes="jsoup-1.6.1.jar"/>
         </jar>
     </target>
 </project>
