@@ -19,7 +19,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
@@ -50,7 +50,7 @@ public class TagBrowser {
 		SchemeRegistry registry = new SchemeRegistry();
 		registry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));
-		ThreadSafeClientConnManager connManager = new ThreadSafeClientConnManager(
+		SingleClientConnManager connManager = new SingleClientConnManager(
 				registry);
 		httpClient = new DefaultHttpClient(connManager);
 		ctx = new BasicHttpContext();
