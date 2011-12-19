@@ -14,8 +14,12 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
@@ -43,7 +47,12 @@ public class TagBrowser {
 	private int requestIndex;
 
 	public TagBrowser() {
-		httpClient = new DefaultHttpClient();
+		SchemeRegistry registry = new SchemeRegistry();
+		registry.register(new Scheme("http", 80, PlainSocketFactory
+				.getSocketFactory()));
+		ThreadSafeClientConnManager connManager = new ThreadSafeClientConnManager(
+				registry);
+		httpClient = new DefaultHttpClient(connManager);
 		ctx = new BasicHttpContext();
 		counter = new ArrayList<Counter>();
 		httpClient.setRedirectStrategy(new DefaultRedirectStrategy() {
