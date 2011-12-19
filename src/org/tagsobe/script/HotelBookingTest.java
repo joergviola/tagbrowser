@@ -53,10 +53,13 @@ public class HotelBookingTest {
 
 		private final String url;
 		private final int loop;
+		private TagBrowser browser;
 
 		public Scan(String url, int loop) {
 			this.url = url;
 			this.loop = loop;
+			this.browser = new TagBrowser();
+			this.browser.addCounter(counter);
 		}
 
 		@Override
@@ -72,13 +75,11 @@ public class HotelBookingTest {
 
 		private void scan() throws ClientProtocolException, IOException,
 				ElementNotFoundException, URISyntaxException {
-			TagBrowser browser = new TagBrowser();
-			browser.addCounter(counter);
 			// browser.setStatStream(System.out);
 			// browser.setShowParams(true);
 			browser.open(url);
 			try {
-				Thread.currentThread().sleep(20);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
