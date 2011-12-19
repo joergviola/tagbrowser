@@ -44,7 +44,7 @@ public class HotelBookingTest {
 		}
 		for (Value value : counter.getValues()) {
 			System.out.println(clients + "\t" + value.getMS() + "\t"
-					+ value.getMSDev());
+					+ value.getMSDev() + "\t" + value.getParse());
 		}
 		// System.out.println(counter.getAll());
 	}
