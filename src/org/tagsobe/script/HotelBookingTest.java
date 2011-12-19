@@ -53,13 +53,10 @@ public class HotelBookingTest {
 
 		private final String url;
 		private final int loop;
-		private TagBrowser browser;
 
 		public Scan(String url, int loop) {
 			this.url = url;
 			this.loop = loop;
-			this.browser = new TagBrowser();
-			this.browser.addCounter(counter);
 		}
 
 		@Override
@@ -75,6 +72,8 @@ public class HotelBookingTest {
 
 		private void scan() throws ClientProtocolException, IOException,
 				ElementNotFoundException, URISyntaxException {
+			TagBrowser browser = new TagBrowser();
+			browser.addCounter(counter);
 			// browser.setStatStream(System.out);
 			// browser.setShowParams(true);
 			browser.open(url);
@@ -83,16 +82,16 @@ public class HotelBookingTest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			// browser.submit(0, "a", "Find Hotels");
-			// browser.clickName("View Hotel");
-			// browser.submit(0, "Book Hotel");
-			// browser.submit(0, "keith", "melbourne", "Login");
-			// browser.submit(0, "12-01-2041", "12-02-2041", "false",
-			// "OCEAN_VIEWdfg", "OCEAN_VIEWdgf", "OCEAN_VIEW",
-			// "1111222233334444", "KEITH MELBOURNE", "1", "1", "2010",
-			// "Proceed");
-			// browser.submit(0, "Confirm");
-			// browser.contains("Current Hotel Bookings");
+			browser.submit(0, "a", "Find Hotels");
+			browser.clickName("View Hotel");
+			browser.submit(0, "Book Hotel");
+			browser.submit(0, "keith", "melbourne", "Login");
+			browser.submit(0, "12-01-2041", "12-02-2041", "false",
+					"OCEAN_VIEWdfg", "OCEAN_VIEWdgf", "OCEAN_VIEW",
+					"1111222233334444", "KEITH MELBOURNE", "1", "1", "2010",
+					"Proceed");
+			browser.submit(0, "Confirm");
+			browser.contains("Current Hotel Bookings");
 		}
 	}
 }

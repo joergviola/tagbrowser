@@ -53,6 +53,7 @@ public class TagBrowser {
 		SingleClientConnManager connManager = new SingleClientConnManager(
 				registry);
 		httpClient = new DefaultHttpClient(connManager);
+		// httpClient = new DefaultHttpClient();
 		ctx = new BasicHttpContext();
 		counter = new ArrayList<Counter>();
 		httpClient.setRedirectStrategy(new DefaultRedirectStrategy() {
