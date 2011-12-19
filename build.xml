@@ -4,12 +4,13 @@
     <!--ANT 1.7 is required                                        -->
 	
     <target name="clean">
+    	<delete dir="bin" />
     	<delete dir="dist" />
     </target>
 	
     <target name="compile">
     	<mkdir dir="bin"/>
-    	<javac source="src" destdir="bin">
+    	<javac srcdir="src" destdir="bin">
     		<classpath>
     			<fileset dir="lib">
     				<include name="*.jar"/>
@@ -19,7 +20,8 @@
     </target>
 	
     <target name="create_run_jar" depends="compile">
-        <jar destfile="dist/tagsobe.jar">
+    	<mkdir dir="dist"/>
+        <jar destfile="dist/tagsobe.jar" >
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="org.tagsobe.script.HotelBookingTest"/>
