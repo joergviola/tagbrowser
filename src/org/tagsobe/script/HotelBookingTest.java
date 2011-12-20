@@ -9,8 +9,8 @@ import org.tagbrowser.api.TagBrowser;
 import org.tagsobe.script.HotelBookingCounter.Value;
 
 public class HotelBookingTest {
-	private static final String CLIENTS = "1,2,3,4,5,7,10,12,15,17,20,25,30,40,50,100,200,300,500";
-	private static final String LOOPS = "200";
+	private static final String CLIENTS = "1,2,3,4,5,7,10,12,15,17,20,25,30,40,50";
+	private static final String LOOPS = "20";
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
