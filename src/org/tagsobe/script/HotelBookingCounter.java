@@ -23,12 +23,21 @@ public class HotelBookingCounter implements Counter {
 			this.msQ += ms * ms;
 		}
 
+		// http://de.wikipedia.org/wiki/Standardabweichung
+		private long dev(long avg, long avgQ) {
+			long rad = avgQ - avg * avg / n;
+			if (rad < 0)
+				return -1;
+			else
+				return (long) Math.sqrt(rad / (n - 1));
+		}
+
 		public long getMS() {
 			return ms / n;
 		}
 
 		public long getMSDev() {
-			return (long) Math.sqrt(Math.abs(msQ / n - (ms * ms) / (n * n)));
+			return dev(ms, msQ);
 		}
 
 		public long getParse() {
@@ -36,8 +45,7 @@ public class HotelBookingCounter implements Counter {
 		}
 
 		public long getParseDev() {
-			return (long) Math.sqrt(Math.abs(parseQ / n - (parse * parse)
-					/ (n * n)));
+			return dev(parse, parseQ);
 		}
 
 		@Override
