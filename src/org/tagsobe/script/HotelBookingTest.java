@@ -39,10 +39,12 @@ public class HotelBookingTest {
 
 	private boolean stats;
 	private boolean params;
+	private String fmt;
 
 	public HotelBookingTest() {
 		stats = System.getProperty("stats") != null;
 		params = System.getProperty("params") != null;
+		fmt = System.getProperty("fmt", "cols");
 	}
 
 	private HotelBookingCounter counter;
@@ -61,13 +63,10 @@ public class HotelBookingTest {
 		}
 		int index = 1;
 		for (Value value : counter.getValues()) {
-			System.out.println(index + ".\t" + clients + "\t" + value.getMS()
-					+ "\t" + value.getMSDev() + "\t" + value.getParse());
+			value.out(index + ".", clients, fmt);
 			index++;
 		}
-		System.out.println("all\t" + clients + "\t" + counter.getAll().getMS()
-				+ "\t" + counter.getAll().getMSDev() + "\t"
-				+ counter.getAll().getParse());
+		counter.getAll().out("all", clients, fmt);
 	}
 
 	class Scan implements Runnable {

@@ -53,6 +53,25 @@ public class HotelBookingCounter implements Counter {
 			return "Load: " + getMS() + "+/-" + getMSDev() + ", parse: "
 					+ getParse() + "+/-" + getParseDev() + ", probes: " + n;
 		}
+
+		public void out(String page, int clients, String fmt) {
+			if ("java".equals(fmt)) {
+				System.out.print("new Stat(\"");
+				System.out.print(page);
+				System.out.print("\",");
+				System.out.print(clients);
+				System.out.print(",");
+				System.out.print(getMS());
+				System.out.print(",");
+				System.out.print(getMSDev());
+				System.out.print(",");
+				System.out.print(getParse());
+				System.out.println("),");
+			} else
+				System.out.println(page + "\t" + clients + "\t" + getMS()
+						+ "\t" + getMSDev() + "\t" + getParse());
+
+		}
 	}
 
 	Value all = new Value();
