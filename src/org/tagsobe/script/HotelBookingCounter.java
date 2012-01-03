@@ -25,6 +25,8 @@ public class HotelBookingCounter implements Counter {
 
 		// http://de.wikipedia.org/wiki/Standardabweichung
 		private long dev(long avg, long avgQ) {
+			if (n <= 1)
+				return 0;
 			long rad = avgQ - avg * avg / n;
 			if (rad < 0)
 				return -1;
