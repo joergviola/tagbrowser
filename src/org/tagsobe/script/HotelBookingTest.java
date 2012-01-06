@@ -10,7 +10,7 @@ import org.tagsobe.script.HotelBookingCounter.Value;
 
 public class HotelBookingTest {
 	private static final String CLIENTS = "1,2,3,4,5,7,10,12,15,17,20,25,30,40,50";
-	private static final String LOOPS = "20";
+	private static final String LOOPS = "10";
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
