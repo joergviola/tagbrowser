@@ -14,6 +14,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -101,6 +102,7 @@ public class TagBrowser {
 	private void request(HttpRequestBase request) throws IOException,
 			ClientProtocolException {
 		request.addHeader("Accept-Language", "de");
+		httpClient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 		if (showCookies && statStream != null)
 			statStream.println(httpClient.getCookieStore().getCookies());
 		long start = System.currentTimeMillis();
@@ -141,6 +143,7 @@ public class TagBrowser {
 	private Element findLinkByName(String name) throws ElementNotFoundException {
 		Elements links = document.getElementsByTag("a");
 		for (Element element : links) {
+			//if (element.text().trim().contains(name))
 			if (name.equals(element.text().trim()))
 				return element;
 		}
