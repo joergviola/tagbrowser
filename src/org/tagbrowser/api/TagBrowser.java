@@ -143,7 +143,6 @@ public class TagBrowser {
 	private Element findLinkByName(String name) throws ElementNotFoundException {
 		Elements links = document.getElementsByTag("a");
 		for (Element element : links) {
-			//if (element.text().trim().contains(name))
 			if (name.equals(element.text().trim()))
 				return element;
 		}

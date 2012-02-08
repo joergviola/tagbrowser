@@ -26,11 +26,7 @@ public class HotelBookingTest {
 		;
 		String[] clients = System.getProperty("clients", CLIENTS).split(",");
 		int loops = Integer.parseInt(System.getProperty("loops", LOOPS));
-//		String url ="";
 		String url = args[0];
-//		 url = "http://localhost:8080/tapestry5-hotel-booking/signin";	
-//		 url = "http://localhost:8082/travel/users/login";
-//		 url = "http://localhost:8080/seam-booking/home.seam";
 		HotelBookingTest test = new HotelBookingTest();
 		try {
 			for (String client : clients) {
@@ -111,13 +107,10 @@ public class HotelBookingTest {
 			browser.submit(0, "keith", "melbourne", "Account Login");
 			browser.submit(0, "a", "Find Hotels");
 			browser.clickName("View Hotel");
-//			System.out.println(browser.getContent());
 			browser.submit(0, "Book Hotel");
-//			System.out.println(browser.getContent());
 			browser.submit(0, "12/01/2041", "12/02/2041", "true",
 					"1111222233334444", "KEITH MELBOURNE", "1", "1", "2009",
 					"Proceed");
-//			System.out.println(browser.getContent());
 			browser.submit(0, "Confirm");
 			browser.contains("Current Hotel Bookings");
 		}
