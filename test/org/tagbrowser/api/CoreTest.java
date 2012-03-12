@@ -20,7 +20,7 @@ public class CoreTest {
 		assertFalse(browser.contains("blablabla"));
 		assertTrue(browser.getLoadTime() > 100L);
 		assertTrue(browser.getLoadTime() < 10000L);
-		browser.clickName("About");
+		browser.clickLinkByName("About");
 		assertTrue(browser.location().equals("https://github.com/about"));
 	}
 
@@ -32,7 +32,7 @@ public class CoreTest {
 		TagForm form = browser.getForm("is24-hp-onestepsearch");
 		form.setField("location", "Lünen");
 		form.submitValue("Suchen");
-		browser.clickName("Citynah und ruhig in Lünen-Brambauer");
+		browser.clickLinkByName("Citynah und ruhig in Lünen-Brambauer");
 		assertTrue(browser.contains("Frau  Elisabeth Braun"));
 	}
 }
