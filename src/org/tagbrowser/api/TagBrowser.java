@@ -129,7 +129,7 @@ public class TagBrowser {
 		return response.getStatusLine().getStatusCode();
 	}
 
-	public void clickName(String name) throws IOException,
+	public void clickLinkByName(String name) throws IOException,
 			ElementNotFoundException {
 		getDom();
 		Element link = findLinkByName(name);

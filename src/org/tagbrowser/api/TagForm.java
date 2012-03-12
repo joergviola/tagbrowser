@@ -45,7 +45,7 @@ public class TagForm {
 		submits = new HashMap<String, String>();
 		readFields(element);
 		method = element.attr("method");
-		action = "/seam-wicket/"+element.attr("action");
+		action = "/booking/"+element.attr("action");
 //		action = element.attr("action");
 	}
 

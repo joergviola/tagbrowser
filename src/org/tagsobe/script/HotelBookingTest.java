@@ -106,12 +106,12 @@ public class HotelBookingTest {
 			}
 			browser.submit(0, "keith", "melbourne", "Account Login");
 			browser.submit(0, "a", "Find Hotels");
-			browser.clickName("View Hotel");
-			browser.submit(0, "Book Hotel");
+			browser.clickLinkByName("View Hotel");
+			browser.clickLinkByName("Book Hotel");
 			browser.submit(0, "12/01/2041", "12/02/2041", "true",
 					"1111222233334444", "KEITH MELBOURNE", "1", "1", "2009",
 					"Proceed");
-			browser.submit(0, "Confirm");
+			browser.clickLinkByName("Confirm");
 			browser.contains("Current Hotel Bookings");
 		}
 	}
