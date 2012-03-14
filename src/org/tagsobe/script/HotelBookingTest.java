@@ -2,6 +2,7 @@ package org.tagsobe.script;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import org.apache.http.client.ClientProtocolException;
 import org.tagbrowser.api.ElementNotFoundException;
@@ -51,11 +52,11 @@ public class HotelBookingTest {
 
 	private void perform(String url, int clients, int loop) throws Exception {
 		counter = new HotelBookingCounter();
-		new Scan(url, 1).run();
+		new Scan(url, 1, 0).run();
 		counter = new HotelBookingCounter();
 		Thread[] pool = new Thread[clients];
 		for (int i = 0; i < pool.length; i++) {
-			pool[i] = new Thread(new Scan(url, loop));
+			pool[i] = new Thread(new Scan(url, loop,i+1));
 			pool[i].start();
 		}
 		for (int i = 0; i < pool.length; i++) {
@@ -73,10 +74,12 @@ public class HotelBookingTest {
 
 		private final String url;
 		private final int loop;
+		private final int clientNumber;
 
-		public Scan(String url, int loop) {
+		public Scan(String url, int loop, int clientNumber) {
 			this.url = url;
 			this.loop = loop;
+			this.clientNumber = clientNumber;
 		}
 
 		@Override
@@ -104,14 +107,18 @@ public class HotelBookingTest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			browser.submit(0, "keith", "melbourne", "Account Login");
+			String username = "user_"+clientNumber+"_"+new Date().getTime();
+			String password = "123456789";
+			browser.clickLinkByName("Register New User");
+			browser.submit(0, username, username,password ,password,"Register");
+			browser.submit(0, username, password, "Account Login");
 			browser.submit(0, "a", "Find Hotels");
 			browser.clickLinkByName("View Hotel");
-			browser.submit(0, "Book Hotel");
+			browser.clickLinkByName("Book Hotel");
 			browser.submit(0, "12/01/2041", "12/02/2041", "true",
-					"1111222233334444", "KEITH MELBOURNE", "1", "1", "2009",
+					"1111222233334444", username, "1", "1", "2009",
 					"Proceed");
-			browser.submit(0, "Confirm");
+			browser.clickLinkByName("Confirm");
 			browser.contains("Current Hotel Bookings");
 		}
 	}
