@@ -45,6 +45,7 @@ public class TagForm {
 		submits = new HashMap<String, String>();
 		readFields(element);
 		method = element.attr("method");
+//		action = "/booking/"+element.attr("action");
 		action = element.attr("action");
 	}
 
@@ -57,10 +58,11 @@ public class TagForm {
 	}
 
 	private void readButtons(Element element) {
-		Elements buttons = element.getElementsByTag("button");
+		Elements buttons = element.getElementsByAttributeValue("type","button");
 		for (Element button : buttons) {
 			String name = button.attr("name");
-			String value = button.text().trim();
+			//String value = button.text().trim();
+			String value = button.attr("value");
 			submits.put(name, value);
 		}
 	}
@@ -79,7 +81,7 @@ public class TagForm {
 					addField(type, name, value);
 			} else if ("submit".equals(type)) {
 				submits.put(name, value);
-			} else {
+			} else if (!"button".equals(type)){
 				addField(type, name, value);
 			}
 		}
